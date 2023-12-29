@@ -42,7 +42,7 @@ int compressFile(const char* filePath) {
     FILE* file = fopen(filePath, "r");
     if (!file) {
         printf("Could not open file: %s\n", filePath);
-        return;
+        return -1;
     }
 
     // Create a frequency table
@@ -64,15 +64,18 @@ int compressFile(const char* filePath) {
     if (!outFile) {
         printf("Could not open file: %s\n", outFilePath);
         free(outFilePath);
-        return;
+        return -1;
     }
 
     // TODO Compress the file and write to outFile
-    
+
 
     // Close the outFile and free the memory
     fclose(outFile);
     free(outFilePath);
+
+
+    return 0;
 }
 
 Node* newNode(char data, unsigned freq) {

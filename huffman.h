@@ -3,4 +3,4 @@
 
 int compressFile(const char* filePath);
 
-#endif // HUFFMAN_H
+#endif

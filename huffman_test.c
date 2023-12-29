@@ -35,6 +35,9 @@ void test_HuffmanCodes(void) {
 //     TEST_ASSERT_EQUAL_INT(0, result);
 // }
 
+
+// TODO test generateHuffmanCodes
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_compressFile);

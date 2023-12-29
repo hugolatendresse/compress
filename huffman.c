@@ -27,7 +27,7 @@ int isSizeOne(HuffmanTree* minHeap);
 Node* extractMin(HuffmanTree* minHeap);
 void insertHuffmanTree(HuffmanTree* minHeap, Node* minHeapNode);
 void buildHuffmanTree(HuffmanTree* minHeap);
-char** printCodes(Node* root, int arr[], int top);
+char** generateHuffmanCodes(Node* root, int arr[], int top);
 char** HuffmanCodes(char data[], int freq[], int size);
 
 int main(int argc, char *argv[]) {
@@ -61,7 +61,7 @@ int compressFile(const char* filePath) {
 
 
     // Build the Huffman tree and code table
-    HuffmanCodes(data, freq);
+    HuffmanCodes(data, freq, NBR_OF_CHARS);
     fclose(file);
 
     // Open the file for writing
@@ -161,15 +161,15 @@ void buildHuffmanTree(HuffmanTree* minHeap) {
     }
 }
 
-char** printCodes(Node* root, int arr[], int top, char** codes, int* index) {
+char** generateHuffmanCodes(Node* root, int arr[], int top, char** codes, int* index) {
     if (root->left) {
         arr[top] = 0;
-        printCodes(root->left, arr, top + 1, codes, index);
+        generateHuffmanCodes(root->left, arr, top + 1, codes, index);
     }
     
     if (root->right) {
         arr[top] = 1;
-        printCodes(root->right, arr, top + 1, codes, index);
+        generateHuffmanCodes(root->right, arr, top + 1, codes, index);
     }
     
     if (!root->left && !root->right) {
@@ -197,24 +197,23 @@ void convertFrequencyTableIntoTwoArrays(int freqTable[], char data[], int freq[]
 }
 
 
-
-char** HuffmanCodes(char data[], int freq[]) {
+char** HuffmanCodes(char data[], int freq[], int size) {
 
     // Create a min heap & inserts all characters of data[]
-    HuffmanTree* minHeap = createAndBuildMinHeap(data, freq, NBR_OF_CHARS);
+    HuffmanTree* minHeap = createAndBuildMinHeap(data, freq, size);
 
     // Build Huffman Tree
     buildHuffmanTree(minHeap);
 
     // Print Huffman codes using the Huffman tree built above
-    int arr[NBR_OF_CHARS], top = 0;
+    int* arr = malloc(size * sizeof(int));
+    int top = 0;
 
-    // Allocate memory for the codes array
-    char** codes = malloc(NBR_OF_CHARS * sizeof(char*));
+    char** codes = malloc(size * sizeof(char*));
     int index = 0;
 
-    printCodes(minHeap->array[0], arr, top, codes, &index);
+    generateHuffmanCodes(minHeap->array[0], arr, top, codes, &index);
+    free(arr);
 
-    // Return the codes array
     return codes;
 }

@@ -27,8 +27,9 @@ int isSizeOne(HuffmanTree* minHeap);
 Node* extractMin(HuffmanTree* minHeap);
 void insertHuffmanTree(HuffmanTree* minHeap, Node* minHeapNode);
 void buildHuffmanTree(HuffmanTree* minHeap);
-char** generateHuffmanCodes(Node* root, int arr[], int top);
+char** generateHuffmanCodes(Node* root, int arr[], int top, char** codes, int* index);
 char** HuffmanCodes(char data[], int freq[], int size);
+void convertFrequencyTableIntoTwoArrays(int freqTable[], char data[], int freq[], int size);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -199,13 +200,11 @@ void convertFrequencyTableIntoTwoArrays(int freqTable[], char data[], int freq[]
 
 char** HuffmanCodes(char data[], int freq[], int size) {
 
-    // Create a min heap & inserts all characters of data[]
+    // TODO need to create a min heap & inserts all characters of data[]
     HuffmanTree* minHeap = createAndBuildMinHeap(data, freq, size);
 
-    // Build Huffman Tree
     buildHuffmanTree(minHeap);
 
-    // Print Huffman codes using the Huffman tree built above
     int* arr = malloc(size * sizeof(int));
     int top = 0;
 

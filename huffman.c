@@ -2,21 +2,21 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-// Define the structure of a node in the Huffman tree
 typedef struct Node {
     char data;
     unsigned freq;
     struct Node *left, *right;
 } Node;
 
-// Define the structure of a Huffman tree
 typedef struct HuffmanTree {
     unsigned size;
     unsigned capacity;
     Node **array;
 } HuffmanTree;
 
+int compressFile(const char* filePath);
 Node* newNode(char data, unsigned freq);
 HuffmanTree* createHuffmanTree(unsigned capacity);
 void swapNode(Node** a, Node** b);
@@ -25,20 +25,56 @@ int isSizeOne(HuffmanTree* minHeap);
 Node* extractMin(HuffmanTree* minHeap);
 void insertHuffmanTree(HuffmanTree* minHeap, Node* minHeapNode);
 void buildHuffmanTree(HuffmanTree* minHeap);
-void printCodes(Node* root, int arr[], int top);
-void HuffmanCodes(char data[], int freq[], int size);
+char** printCodes(Node* root, int arr[], int top);
+char** HuffmanCodes(char data[], int freq[], int size);
 
-// Main function
-int main() {
-    // Test data
-    char arr[] = {'a', 'b', 'c', 'd', 'e', 'f'};
-    int freq[] = {5, 9, 12, 13, 16, 45};
-    int size = sizeof(arr)/sizeof(arr[0]);
-    HuffmanCodes(arr, freq, size);
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Usage: ./compress <file>\n");
+        return 1;
+    }
+    compressFile(argv[1]);
     return 0;
 }
 
-// Implement the functions here
+int compressFile(const char* filePath) {
+    // Open file
+    FILE* file = fopen(filePath, "r");
+    if (!file) {
+        printf("Could not open file: %s\n", filePath);
+        return;
+    }
+
+    // Create a frequency table
+    int freq[256] = {0};
+    char c;
+    while ((c = fgetc(file)) != EOF) {
+        freq[(unsigned char)c]++;
+    }
+
+    // Build the Huffman tree and code table
+    HuffmanCodes(freq, 256, 256);
+    fclose(file);
+
+    // Open the file for writing
+    char* outFilePath = malloc(strlen(filePath) + 5); // +5 for ".huff" and null terminator
+    strcpy(outFilePath, filePath);
+    strcat(outFilePath, ".huff");
+    FILE* outFile = fopen(outFilePath, "w");
+    if (!outFile) {
+        printf("Could not open file: %s\n", outFilePath);
+        free(outFilePath);
+        return;
+    }
+
+    // TODO Compress the file and write to outFile
+    
+
+    // Close the outFile and free the memory
+    fclose(outFile);
+    free(outFilePath);
+}
+
 Node* newNode(char data, unsigned freq) {
     Node* temp = (Node*)malloc(sizeof(Node));
     temp->left = temp->right = NULL;
@@ -114,34 +150,45 @@ void buildHuffmanTree(HuffmanTree* minHeap) {
     }
 }
 
-void printCodes(Node* root, int arr[], int top) {
+char** printCodes(Node* root, int arr[], int top, char** codes, int* index) {
     if (root->left) {
         arr[top] = 0;
-        printCodes(root->left, arr, top + 1);
+        printCodes(root->left, arr, top + 1, codes, index);
     }
     
     if (root->right) {
         arr[top] = 1;
-        printCodes(root->right, arr, top + 1);
+        printCodes(root->right, arr, top + 1, codes, index);
     }
     
     if (!root->left && !root->right) {
-        printf("%c: ", root->data);
+        codes[*index] = malloc(top + 1);
         for (int i = 0; i < top; ++i) {
-            printf("%d", arr[i]);
+            codes[*index][i] = arr[i] ? '1' : '0';
         }
-        printf("\n");
+        codes[*index][top] = '\0';
+        (*index)++;
     }
+
+    return codes;
 }
 
-void HuffmanCodes(char data[], int freq[], int size) {
-    HuffmanTree* minHeap = createHuffmanTree(size);
-    for (int i = 0; i < size; ++i) {
-        minHeap->array[i] = newNode(data[i], freq[i]);
-    }
-    minHeap->size = size;
+char** HuffmanCodes(char data[], int freq[], int size) {
+    // Create a min heap & inserts all characters of data[]
+    HuffmanTree* minHeap = createAndBuildMinHeap(data, freq, size);
+
+    // Build Huffman Tree
     buildHuffmanTree(minHeap);
-    int arr[100], top = 0;
-    printCodes(minHeap->array[0], arr, top);
-}
 
+    // Print Huffman codes using the Huffman tree built above
+    int arr[MAX_TREE_HT], top = 0;
+
+    // Allocate memory for the codes array
+    char** codes = malloc(size * sizeof(char*));
+    int index = 0;
+
+    printCodes(minHeap->array[0], arr, top, codes, &index);
+
+    // Return the codes array
+    return codes;
+}

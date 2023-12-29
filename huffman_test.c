@@ -1,5 +1,5 @@
 #include "unity.h"
-#include "compress.h" // Assuming compressFile is declared in this header
+#include "huffman.h"
 
 void setUp(void) {
     // This is run before EACH test

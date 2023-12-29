@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define NBR_OF_CHARS 256
+
 typedef struct Node {
     char data;
     unsigned freq;
@@ -46,14 +48,20 @@ int compressFile(const char* filePath) {
     }
 
     // Create a frequency table
-    int freq[256] = {0};
+    int freqTable[NBR_OF_CHARS] = {0};
     char c;
     while ((c = fgetc(file)) != EOF) {
-        freq[(unsigned char)c]++;
+        freqTable[(unsigned char)c]++;
     }
 
+    // Convert to arrays
+    char data[NBR_OF_CHARS];
+    int freq[NBR_OF_CHARS];
+    convertFrequencyTableIntoTwoArrays(freqTable, data, freq, NBR_OF_CHARS);
+
+
     // Build the Huffman tree and code table
-    HuffmanCodes(freq, 256, 256);
+    HuffmanCodes(data, freq);
     fclose(file);
 
     // Open the file for writing
@@ -176,18 +184,33 @@ char** printCodes(Node* root, int arr[], int top, char** codes, int* index) {
     return codes;
 }
 
-char** HuffmanCodes(char data[], int freq[], int size) {
+
+void convertFrequencyTableIntoTwoArrays(int freqTable[], char data[], int freq[], int size) {
+    int index = 0;
+    for (int i = 0; i < size; i++) {
+        if (freqTable[i] > 0) {
+            data[index] = (char)i;
+            freq[index] = freqTable[i];
+            index++;
+        }
+    }
+}
+
+
+
+char** HuffmanCodes(char data[], int freq[]) {
+
     // Create a min heap & inserts all characters of data[]
-    HuffmanTree* minHeap = createAndBuildMinHeap(data, freq, size);
+    HuffmanTree* minHeap = createAndBuildMinHeap(data, freq, NBR_OF_CHARS);
 
     // Build Huffman Tree
     buildHuffmanTree(minHeap);
 
     // Print Huffman codes using the Huffman tree built above
-    int arr[MAX_TREE_HT], top = 0;
+    int arr[NBR_OF_CHARS], top = 0;
 
     // Allocate memory for the codes array
-    char** codes = malloc(size * sizeof(char*));
+    char** codes = malloc(NBR_OF_CHARS * sizeof(char*));
     int index = 0;
 
     printCodes(minHeap->array[0], arr, top, codes, &index);

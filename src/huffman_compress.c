@@ -34,15 +34,6 @@ HuffmanTree* createAndBuildMinHeap(char data[], int freq[], int size);
 HuffmanTree* createMinHeap(int capacity);
 void buildMinHeap(HuffmanTree* minHeap);
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        printf("Usage: ./compress <file>\n");
-        return 1;
-    }
-    compressFile(argv[1]);
-    return 0;
-}
-
 int compressFile(const char* filePath) {
     // Open file
     FILE* file = fopen(filePath, "r");
@@ -68,6 +59,7 @@ int compressFile(const char* filePath) {
     HuffmanCodes(data, freq, NBR_OF_CHARS);
     fclose(file);
 
+
     // Open the file for writing
     char* outFilePath = malloc(strlen(filePath) + 5); // +5 for ".huff" and null terminator
     strcpy(outFilePath, filePath);
@@ -79,10 +71,22 @@ int compressFile(const char* filePath) {
         return -1;
     }
 
-    // TODO Compress the file and write to outFile
+    // Compress the file and write to outFile
+    file = fopen(filePath, "r");
+    if (!file) {
+        printf("Could not open file: %s\n", filePath);
+        free(outFilePath);
+        return -1;
+    }
 
+    char ch;
+    while (fread(&ch, sizeof(char), 1, file)) {
+        char* huffmanCode = HuffmanCodes[(unsigned char)ch];
+        fputs(huffmanCode, outFile);
+    }
 
-    // Close the outFile and free the memory
+fclose(file);
+
     fclose(outFile);
     free(outFilePath);
 

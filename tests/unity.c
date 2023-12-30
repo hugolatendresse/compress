@@ -4,7 +4,7 @@
     [Released under MIT License. Please refer to license.txt for details]
 ============================================================================ */
 
-#include "unity.h"
+#include "../include/unity.h"
 
 #ifndef UNITY_PROGMEM
 #define UNITY_PROGMEM

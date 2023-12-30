@@ -1,5 +1,5 @@
-#include "unity.h"
-#include "huffman.h"
+#include "../include/unity.h"
+#include "../include/huffman_compress.h"
 
 void setUp(void) {
     // This is run before EACH test

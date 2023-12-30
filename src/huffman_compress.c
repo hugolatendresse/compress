@@ -58,7 +58,7 @@ int compressFile(const char* filePath) {
     // Build the Huffman tree and code table
     HuffmanCodes(data, freq, NBR_OF_CHARS);
     fclose(file);
-
+    char** huffmanCodes = HuffmanCodes(data, freq, NBR_OF_CHARS); // TODO rename huffmanCodes to something more different, rn var names are confusing
 
     // Open the file for writing
     char* outFilePath = malloc(strlen(filePath) + 5); // +5 for ".huff" and null terminator
@@ -81,7 +81,7 @@ int compressFile(const char* filePath) {
 
     char ch;
     while (fread(&ch, sizeof(char), 1, file)) {
-        char* huffmanCode = HuffmanCodes[(unsigned char)ch];
+        char* huffmanCode = huffmanCodes[(unsigned char)ch];
         fputs(huffmanCode, outFile);
     }
 

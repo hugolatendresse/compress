@@ -1,4 +1,4 @@
-//  Program that can compress and decompress files, like a simple version of gzip. learn about data compression algorithms.
+//  Program that can compress and decompress files, like a simple version of gzip.
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -10,7 +10,7 @@ void tearDown(void) {
 }
 
 void test_compressFile(void) {
-    int result = compressFile("test.txt");
+    int result = compressFile("tests/test_data/test123.txt");
     TEST_ASSERT_EQUAL_INT(0, result);
 }
 
@@ -31,7 +31,7 @@ void test_HuffmanCodes(void) {
 
 // TODO
 // void test_decompressFile(void) {
-//     int result = decompressFile("test.txt.huff");
+//     int result = decompressFile("tests/test_data/test123.txt.huff");
 //     TEST_ASSERT_EQUAL_INT(0, result);
 // }
 

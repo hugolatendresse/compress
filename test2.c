@@ -8,5 +8,5 @@
 #include<math.h>
 
 int main() {
-    printf("thisis the test.c in compress/");
+    printf("test2.c with another main in compress/");
 }

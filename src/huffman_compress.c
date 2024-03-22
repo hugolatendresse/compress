@@ -102,7 +102,6 @@ Node* newNode(char data, unsigned freq) {
     return temp;
 }
 
-// TODO delete all functions that are never used
 HuffmanTree* createHuffmanTree(unsigned capacity) {
     HuffmanTree* minHeap = (HuffmanTree*)malloc(sizeof(HuffmanTree));
     minHeap->size = 0;

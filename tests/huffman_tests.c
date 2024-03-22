@@ -20,7 +20,7 @@ void test_HuffmanCodes(void) {
     int size = sizeof(data)/sizeof(data[0]);
     char** actual = HuffmanCodes(data, freq, size);
 
-    TEST_ASSERT_EQUAL_STRING("1100", actual[0]);
+    TEST_ASSERT_EQUAL_STRING("1100", actual[0]); // TODO  Expected '1100' Was '0'
     TEST_ASSERT_EQUAL_STRING("1101", actual[1]);
     TEST_ASSERT_EQUAL_STRING("100", actual[2]);
     TEST_ASSERT_EQUAL_STRING("101", actual[3]);

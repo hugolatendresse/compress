@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -I .
+CFLAGS = -g -I .
 
 # TODO: create a main.c that refers to huffman_compress and remove the main definition from huffman_compress
 compress: src/main.c src/huffman_compress.c
@@ -7,3 +7,6 @@ compress: src/main.c src/huffman_compress.c
 
 huffman_tests:  src/huffman_compress.c tests/huffman_tests.c tests/unity.c
 	$(CC) $(CFLAGS) src/huffman_compress.c tests/huffman_tests.c tests/unity.c -o huffman_tests
+
+test:  test.c
+	$(CC) $(CFLAGS) test.c -o test

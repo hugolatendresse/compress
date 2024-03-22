@@ -9,6 +9,8 @@ include_directories(src)
 #add_custom_target(CLION_EXE_DIR=${PROJECT_BINARY_DIR} test COMMAND make)
 set(ENV{CLION_EXE_DIR} ${PROJECT_BINARY_DIR})
 add_custom_target(test COMMAND make test -C ${CMAKE_SOURCE_DIR})
+add_custom_target(compress COMMAND make compress -C ${CMAKE_SOURCE_DIR})
+add_custom_target(huffman_tests COMMAND make huffman_tests -C ${CMAKE_SOURCE_DIR})
 
 #add_executable(compress
 #        include/huffman_compress.h

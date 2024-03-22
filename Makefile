@@ -12,12 +12,8 @@ test:
 	$(CC) $(CFLAGS) test.c -o test
 	$(CC) $(CFLAGS) test2.c -o test2
 
-#all:
-##	echo "Compiling: `$(CLION_EXE_DIR)/test` from Makefile in compress project"
-##	gcc -g -o $(CLION_EXE_DIR)/test test.c -lpthread
-#	gcc -g -o test test.c -lpthread
-#	gcc -g -o test2 test2.c -lpthread
-#
 clean:
 	del /F /Q test.exe
 	del /F /Q test2.exe
+	del /F /Q compress.exe
+	del /F /Q huffman_tests.exe

@@ -1,5 +1,5 @@
-#CC = gcc
-#CFLAGS = -g -I .
+CC = gcc
+CFLAGS = -g -I .
 
 ## TODO: create a main.c that refers to huffman_compress and remove the main definition from huffman_compress
 compress: src/main.c src/huffman_compress.c

@@ -2,3 +2,5 @@
 compress
 huffman_tests
 .idea/
+/cmake-build-debug/
+*.exe
